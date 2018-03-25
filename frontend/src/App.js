@@ -1,15 +1,18 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Twitter from "./containers/Twitter";
+import FacebookLogin from "react-facebook-login";
+import { calculatePostTime } from "./utils/calculatePostTime";
 
 class App extends Component {
   constructor() {
     super();
 
     this.state = {
-      isAuthenticated: false,
-      user: null,
-      token: "",
+      isTwitterAuthenticated: false,
+      twitterUser: null,
+      twitterToken: "",
+      twitterToggled: true,
       whatToPost: ""
     };
   }
@@ -18,11 +21,32 @@ class App extends Component {
     this.setState({ whatToPost: e.target.value });
   };
 
+  onTwitterToggle = () => {
+    this.setState({ twitterToggled: !this.state.twitterToggled });
+  };
+
+  sendTwit = () => {
+    const { whatToPost } = this.state;
+    return axios({
+      method: "post",
+      url: "http://localhost:4000/api/v1/sendTwit",
+      data: {
+        status: whatToPost
+      }
+    })
+      .then(res => console.log(res))
+      .then(() => this.setState({ whatToPost: "" }));
+  };
+
   onSuccess = response => {
     const token = response.headers.get("x-auth-token");
     response.json().then(user => {
       if (token) {
-        this.setState({ isAuthenticated: true, user: user, token: token });
+        this.setState({
+          isTwitterAuthenticated: true,
+          twitterUser: user,
+          twitterToken: token
+        });
       }
     });
   };
@@ -32,39 +56,34 @@ class App extends Component {
   };
 
   logout = () => {
-    this.setState({ isAuthenticated: false, token: "", user: null });
+    this.setState({
+      isAuthenticated: false,
+      twitterToken: "",
+      twitterUser: null
+    });
   };
-
-  // sendTwit = () => {
-  //   return axios({
-  //     method: "post",
-  //     url: "http://localhost:4000/api/v1/sendTwit",
-  //     data: {
-  //       status: this.state.whatToPost
-  //     }
-  //   }).then(res => console.log(res));
-  // };
 
   render() {
     console.log(this.state);
-    const { whatToPost, isAuthenticated, user } = this.state;
+    const {
+      whatToPost,
+      isTwitterAuthenticated,
+      twitterUser,
+      twitterToggled
+    } = this.state;
     return (
       <div className="App">
-        <div>
-          <span>Type in your post message</span>
-          <input
-            type="text"
-            onChange={this.handleOnChange}
-            placeholder="type sth"
-          />
-        </div>
         <Twitter
           whatToPost={whatToPost}
-          user={user}
-          isAuthenticated={isAuthenticated}
+          user={twitterUser}
+          isAuthenticated={isTwitterAuthenticated}
+          twitterToggled={twitterToggled}
           logout={this.logout}
           onFailed={this.onFailed}
           onSuccess={this.onSuccess}
+          handleOnChange={this.handleOnChange}
+          onTwitterToggle={this.onTwitterToggle}
+          sendTwit={this.sendTwit}
         />
       </div>
     );
@@ -72,3 +91,18 @@ class App extends Component {
 }
 
 export default App;
+
+// responseFacebook = response => {
+//   console.log(response);
+// };
+
+// <div >
+// <FacebookLogin
+//   appId="*********"
+//   autoLoad={true}
+//   fields="name,email,picture,posts"
+//   scope="public_profile,user_posts"
+//   // onClick={componentClicked}
+//   callback={this.responseFacebook}
+// />
+// </div>

@@ -1,33 +1,25 @@
 import React, { Component } from "react";
 import TwitterLogin from "react-twitter-auth";
 import axios from "axios";
+import { PostForm } from "../presentational/PostForm";
 
 export default class Twitter extends Component {
   constructor(props) {
     super(props);
-    // this.state = {
-    // }
   }
 
-  sendTwit = () => {
-    const { whatToPost } = this.props;
-    return axios({
-      method: "post",
-      url: "http://localhost:4000/api/v1/sendTwit",
-      data: {
-        status: this.props.whatToPost
-      }
-    }).then(res => console.log(res));
-  };
-
   renderContent = () => {
-    let content = !!this.props.isAuthenticated ? (
+    let content = this.props.isAuthenticated ? (
       <div>
         <p>Authenticated</p>
         <div>{this.props.user.email}</div>
-        <div>
-          <button onClick={this.sendTwit}>Post on Twitter</button>
-        </div>
+        <PostForm
+          handleOnChange={this.props.handleOnChange}
+          onTwitterToggle={this.props.onTwitterToggle}
+          twitterToggled={this.props.twitterToggled}
+          sendTwit={this.props.sendTwit}
+          whatToPost={this.props.whatToPost}
+        />
         <div>
           <button onClick={this.props.logout} className="button">
             Log out
