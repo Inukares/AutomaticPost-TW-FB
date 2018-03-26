@@ -12,7 +12,7 @@ App allows you to schedule the posting during time of the week, that has the hig
 
 # How To Start Application?
 
-* Start MongoDB - our application expects that there is `twitter-demo` database in MongoDB
+* Start MongoDB - our application expects that there is `twitter-demo` database in MongoDB (`sudo mongod` for starting database on your localmachine)
 * Put Twitter secret and key in [twitter.config.js](https://github.com/GenFirst/react-node-twitter-login/blob/master/backend/twitter.config.js) and
 * Go to [frontend](https://github.com/GenFirst/react-node-twitter-login/tree/master/frontend) folder
   * `npm install`
@@ -20,6 +20,7 @@ App allows you to schedule the posting during time of the week, that has the hig
 * Go to [backend](https://github.com/GenFirst/react-node-twitter-login/tree/master/backend) folder
   * `npm install`
   * `gulp develop`
+* Change `consumerKey` and `consumerSecret` in `twitterConfig.js` to make the application work.
 
 # License
 
