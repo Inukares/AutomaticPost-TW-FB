@@ -43,6 +43,10 @@ class App extends Component {
   sendTwit = () => {
     const { whatToPost, isTwitterToggled, autoSchedule } = this.state;
     if (!isTwitterToggled) {
+      return this.setState({
+        wrongInputMessage: "Make sure to post to at least one social media!",
+        showModal: true
+      });
       return;
     } else if (!whatToPost) {
       return this.setState({
