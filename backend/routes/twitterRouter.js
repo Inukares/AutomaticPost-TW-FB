@@ -9,7 +9,8 @@ var mongoose = require("../mongoose"),
   router = express.Router(),
   request = require("request"),
   twitterConfig = require("../configs/twitterConfig"),
-  Twit = require("twit");
+  Twit = require("twit"),
+  schedule = require("node-schedule");
 
 mongoose();
 
@@ -166,11 +167,18 @@ function tweeted(err, data, response) {
 }
 
 router.route("/sendTwit").post(function(req, res, next) {
-  let params = {
+  const { toBeScheduled, timeToPost } = req.body;
+  const params = {
     status: req.body.status
   };
 
-  T.post("statuses/update", params, tweeted);
+  const twPost = () => T.post("statuses/update", params, tweeted);
+  // check if you want to schedule a post.
+  if (toBeScheduled) {
+    schedule.scheduleJob(timeToPost, twPost);
+  } else {
+    twPost();
+  }
 
   res.json(params);
 });

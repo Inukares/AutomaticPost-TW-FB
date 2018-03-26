@@ -45,5 +45,5 @@ export const calculatePostTime = () => {
       setMomentDate(postTime);
     }
   }
-  return postTime;
+  return postTime.toDate();
 };

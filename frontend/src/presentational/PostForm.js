@@ -2,51 +2,66 @@ import React from "react";
 import PropTypes from "prop-types";
 import "./postForm.css";
 
-export const PostForm = ({
-  handleOnChange,
-  onTwitterToggle,
-  twitterToggled,
-  sendTwit,
-  whatToPost
-}) => (
-  <div id="wrapper">
-    <header>
-      <div id="page-banner">
-        <h1 className="title">Automate your posts !</h1>
-        <div className="checkboxWrapper">
-          <input
-            type="checkbox"
-            className="hide"
-            onClick={() => onTwitterToggle()}
-            value={twitterToggled}
-          />
-          <span>Post to Twitter</span>
-        </div>
-      </div>
-    </header>
-    <div id="add-book">
-      <input
-        type="text"
-        onChange={handleOnChange}
-        value={whatToPost}
-        placeholder="Add a post..."
-      />
-      <button onClick={sendTwit}>Add post</button>
-    </div>
-  </div>
-);
+export const PostForm = props => {
+  const {
+    handleOnChange,
+    onTwitterToggle,
+    isTwitterToggled,
+    onAutoScheduleToggle,
+    sendTwit,
+    whatToPost,
+    user,
+    autoSchedule
+  } = props;
+  return (
+    <div id="wrapper">
+      <header>
+        <div id="page-banner">
+          <h1 className="title">Automate your posts !</h1>
 
-// export const PostForm = ({ handleOnChange }) => (
-//   <div>
-//     <span>Type in your post message</span>
-//     <input type="text" onChange={handleOnChange} placeholder="type sth" />
-//   </div>
-// );
+          <p>User: {user.email}</p>
+          <p>{props.children}</p>
+
+          <div className="checkboxWrapper">
+            <input
+              type="checkbox"
+              className="hide"
+              onChange={() => onTwitterToggle()}
+              checked={isTwitterToggled}
+            />
+            <span>Post to Twitter</span>
+          </div>
+          <div className="checkboxWrapper">
+            <input
+              type="checkbox"
+              className="hide"
+              onChange={() => onAutoScheduleToggle()}
+              checked={autoSchedule}
+            />
+            <span>Schedule posts</span>
+          </div>
+        </div>
+      </header>
+      <div id="add-book">
+        <input
+          type="text"
+          onChange={handleOnChange}
+          value={whatToPost}
+          placeholder="Add a post..."
+        />
+        <button onClick={sendTwit}>Add post</button>
+      </div>
+    </div>
+  );
+};
 
 PostForm.propTypes = {
   handleOnChange: PropTypes.func.isRequired,
   sendTwit: PropTypes.func.isRequired,
   onTwitterToggle: PropTypes.func.isRequired,
-  twitterToggled: PropTypes.bool.isRequired,
-  whatToPost: PropTypes.string.isRequired
+  onAutoScheduleToggle: PropTypes.func.isRequired,
+  isTwitterToggled: PropTypes.bool.isRequired,
+  whatToPost: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
+  autoSchedule: PropTypes.bool.isRequired
 };

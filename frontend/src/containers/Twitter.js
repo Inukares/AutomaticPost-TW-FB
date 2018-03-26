@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import TwitterLogin from "react-twitter-auth";
-import axios from "axios";
 import { PostForm } from "../presentational/PostForm";
 
 export default class Twitter extends Component {
@@ -9,22 +8,24 @@ export default class Twitter extends Component {
   }
 
   renderContent = () => {
-    let content = this.props.isAuthenticated ? (
+    let content = !!this.props.isAuthenticated ? (
       <div>
-        <p>Authenticated</p>
-        <div>{this.props.user.email}</div>
         <PostForm
           handleOnChange={this.props.handleOnChange}
           onTwitterToggle={this.props.onTwitterToggle}
-          twitterToggled={this.props.twitterToggled}
+          isTwitterToggled={this.props.isTwitterToggled}
+          onAutoScheduleToggle={this.props.onAutoScheduleToggle}
           sendTwit={this.props.sendTwit}
           whatToPost={this.props.whatToPost}
-        />
-        <div>
-          <button onClick={this.props.logout} className="button">
-            Log out
-          </button>
-        </div>
+          user={this.props.user}
+          autoSchedule={this.props.autoSchedule}
+        >
+          <div>
+            <button onClick={this.props.logout} className="logout-button">
+              Log out from Twitter
+            </button>
+          </div>
+        </PostForm>
       </div>
     ) : (
       <TwitterLogin
@@ -40,9 +41,7 @@ export default class Twitter extends Component {
   render() {
     return (
       <div>
-        <div style={{ padding: 20, width: 400 }}>
-          {this.renderContent.call(this)}
-        </div>
+        <div>{this.renderContent()}</div>
       </div>
     );
   }

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
 import Twitter from "./containers/Twitter";
-import FacebookLogin from "react-facebook-login";
 import { calculatePostTime } from "./utils/calculatePostTime";
 
 class App extends Component {
@@ -12,8 +11,9 @@ class App extends Component {
       isTwitterAuthenticated: false,
       twitterUser: null,
       twitterToken: "",
-      twitterToggled: true,
-      whatToPost: ""
+      isTwitterToggled: true,
+      whatToPost: "",
+      autoSchedule: false
     };
   }
 
@@ -22,20 +22,30 @@ class App extends Component {
   };
 
   onTwitterToggle = () => {
-    this.setState({ twitterToggled: !this.state.twitterToggled });
+    this.setState({ isTwitterToggled: !this.state.isTwitterToggled });
+  };
+
+  onAutoScheduleToggle = () => {
+    this.setState({ autoSchedule: !this.state.autoSchedule });
   };
 
   sendTwit = () => {
-    const { whatToPost } = this.state;
-    return axios({
-      method: "post",
-      url: "http://localhost:4000/api/v1/sendTwit",
-      data: {
-        status: whatToPost
-      }
-    })
-      .then(res => console.log(res))
-      .then(() => this.setState({ whatToPost: "" }));
+    const { whatToPost, isTwitterToggled, autoSchedule } = this.state;
+    if (!isTwitterToggled) {
+      return;
+    } else {
+      return axios({
+        method: "post",
+        url: "http://localhost:4000/api/v1/sendTwit",
+        data: {
+          status: whatToPost,
+          toBeScheduled: autoSchedule,
+          timeToPost: calculatePostTime()
+        }
+      })
+        .then(res => console.log(res))
+        .then(() => this.setState({ whatToPost: "" }));
+    }
   };
 
   onSuccess = response => {
@@ -56,10 +66,13 @@ class App extends Component {
   };
 
   logout = () => {
-    this.setState({
-      isAuthenticated: false,
-      twitterToken: "",
-      twitterUser: null
+    // is functional to prevent rendering components not having proper props
+    this.setState(() => {
+      return {
+        isTwitterAuthenticated: false,
+        twitterToken: "",
+        twitterUser: null
+      };
     });
   };
 
@@ -69,7 +82,8 @@ class App extends Component {
       whatToPost,
       isTwitterAuthenticated,
       twitterUser,
-      twitterToggled
+      isTwitterToggled,
+      autoSchedule
     } = this.state;
     return (
       <div className="App">
@@ -77,13 +91,15 @@ class App extends Component {
           whatToPost={whatToPost}
           user={twitterUser}
           isAuthenticated={isTwitterAuthenticated}
-          twitterToggled={twitterToggled}
+          autoSchedule={autoSchedule}
+          isTwitterToggled={isTwitterToggled}
           logout={this.logout}
           onFailed={this.onFailed}
           onSuccess={this.onSuccess}
           handleOnChange={this.handleOnChange}
           onTwitterToggle={this.onTwitterToggle}
           sendTwit={this.sendTwit}
+          onAutoScheduleToggle={this.onAutoScheduleToggle}
         />
       </div>
     );
