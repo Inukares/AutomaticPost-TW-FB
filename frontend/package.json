@@ -8,6 +8,7 @@
     "react-twitter-auth": "0.0.9"
   },
   "devDependencies": {
+    "react-facebook-login": "^4.0.1",
     "react-scripts": "1.0.13"
   },
   "scripts": {

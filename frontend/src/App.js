@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import Twitter from "./containers/Twitter";
+import { Twitter } from "./containers/Twitter";
 import { calculatePostTime } from "./utils/calculatePostTime";
 
 class App extends Component {
@@ -13,7 +13,8 @@ class App extends Component {
       twitterToken: "",
       isTwitterToggled: true,
       whatToPost: "",
-      autoSchedule: false
+      autoSchedule: false,
+      postResponse: ""
     };
   }
 
@@ -34,17 +35,24 @@ class App extends Component {
     if (!isTwitterToggled) {
       return;
     } else {
-      return axios({
-        method: "post",
-        url: "http://localhost:4000/api/v1/sendTwit",
-        data: {
-          status: whatToPost,
-          toBeScheduled: autoSchedule,
-          timeToPost: calculatePostTime()
-        }
-      })
-        .then(res => console.log(res))
-        .then(() => this.setState({ whatToPost: "" }));
+      return (
+        axios({
+          method: "post",
+          url: "http://localhost:4000/api/v1/sendTwit",
+          data: {
+            status: whatToPost,
+            toBeScheduled: autoSchedule,
+            timeToPost: calculatePostTime()
+          }
+        })
+          // so I can display modal that the post will be send
+          .then(res =>
+            this.setState({
+              postResponse: res.statusText
+            })
+          )
+          .then(() => this.setState({ whatToPost: "" }))
+      );
     }
   };
 
@@ -65,7 +73,7 @@ class App extends Component {
     alert(error);
   };
 
-  logout = () => {
+  twitterLogout = () => {
     // is functional to prevent rendering components not having proper props
     this.setState(() => {
       return {
@@ -78,22 +86,13 @@ class App extends Component {
 
   render() {
     console.log(this.state);
-    const {
-      whatToPost,
-      isTwitterAuthenticated,
-      twitterUser,
-      isTwitterToggled,
-      autoSchedule
-    } = this.state;
+    const { twitterUser } = this.state;
     return (
       <div className="App">
         <Twitter
-          whatToPost={whatToPost}
+          {...this.state}
           user={twitterUser}
-          isAuthenticated={isTwitterAuthenticated}
-          autoSchedule={autoSchedule}
-          isTwitterToggled={isTwitterToggled}
-          logout={this.logout}
+          twitterLogout={this.twitterLogout}
           onFailed={this.onFailed}
           onSuccess={this.onSuccess}
           handleOnChange={this.handleOnChange}
@@ -107,18 +106,3 @@ class App extends Component {
 }
 
 export default App;
-
-// responseFacebook = response => {
-//   console.log(response);
-// };
-
-// <div >
-// <FacebookLogin
-//   appId="*********"
-//   autoLoad={true}
-//   fields="name,email,picture,posts"
-//   scope="public_profile,user_posts"
-//   // onClick={componentClicked}
-//   callback={this.responseFacebook}
-// />
-// </div>

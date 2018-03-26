@@ -42,7 +42,7 @@ export const PostForm = props => {
           </div>
         </div>
       </header>
-      <div id="add-book">
+      <div id="add-twit">
         <input
           type="text"
           onChange={handleOnChange}

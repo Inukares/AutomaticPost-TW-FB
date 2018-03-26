@@ -17,8 +17,6 @@ const setMomentDate = (mmt, addDays = false) => {
   return mmt;
 };
 
-const format = mmt => moment(mmt).format("DD-MM-YYYY, h:mm:ss");
-
 export const calculatePostTime = () => {
   const currentTime = moment();
   const nowDay = moment().day();

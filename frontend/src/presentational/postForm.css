@@ -51,16 +51,12 @@ h2 {
   color: #444;
 }
 
-.delete:hover {
-  background: #333;
-}
-
-#add-book {
+#add-twit {
   width: 400px;
   margin: 0 auto;
 }
 
-#add-book input {
+#add-twit input {
   display: block;
   margin: 20px 0;
   padding: 10px;
@@ -73,7 +69,7 @@ h2 {
   clear: both;
 }
 
-#add-book button {
+#add-twit button {
   border: 1px solid #9361bf;
   background: #9361bf;
   padding: 1px 20px;
@@ -89,7 +85,7 @@ h2 {
   color: white;
 }
 
-.logout-button {
+.twitterLogout-button {
   border: 1px solid #9361bf;
   background: #9361bf;
   margin: 0;
