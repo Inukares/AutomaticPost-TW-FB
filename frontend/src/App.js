@@ -4,6 +4,7 @@ import { Twitter } from "./containers/Twitter";
 import { calculatePostTime } from "./utils/calculatePostTime";
 import { format } from "./utils/calculatePostTime";
 import { Modal, ModalHeader, ModalBody } from "reactstrap";
+import { ModalInformation } from "./presentational/ModalInformation";
 
 class App extends Component {
   constructor() {
@@ -16,7 +17,8 @@ class App extends Component {
       isTwitterToggled: true,
       whatToPost: "",
       autoSchedule: false,
-      showModal: false
+      showModal: false,
+      wrongInputMessage: ""
     };
   }
 
@@ -42,6 +44,11 @@ class App extends Component {
     const { whatToPost, isTwitterToggled, autoSchedule } = this.state;
     if (!isTwitterToggled) {
       return;
+    } else if (!whatToPost) {
+      return this.setState({
+        wrongInputMessage: "Make sure to fill out message input!",
+        showModal: true
+      });
     } else {
       return (
         axios({
@@ -57,6 +64,7 @@ class App extends Component {
           .then(res => {
             if (res.statusText === "OK") {
               this.setState({
+                wrongInputMessage: "",
                 showModal: true
               });
             }
@@ -96,19 +104,20 @@ class App extends Component {
 
   render() {
     console.log(this.state);
-    const { twitterUser, showModal, autoSchedule } = this.state;
+    const {
+      twitterUser,
+      showModal,
+      autoSchedule,
+      wrongInputMessage
+    } = this.state;
     return (
       <div className="App">
-        <Modal isOpen={showModal} toggle={this.toggleModal}>
-          <ModalHeader toggle={this.toggleModal}>
-            You have sent a post!
-          </ModalHeader>
-          <ModalBody>
-            {autoSchedule
-              ? `Your post will be posted on: ${format(calculatePostTime())}`
-              : `Your post has just been added !`}
-          </ModalBody>
-        </Modal>
+        <ModalInformation
+          toggleModal={this.toggleModal}
+          showModal={showModal}
+          wrongInputMessage={wrongInputMessage}
+          autoSchedule={autoSchedule}
+        />
         <Twitter
           {...this.state}
           user={twitterUser}
