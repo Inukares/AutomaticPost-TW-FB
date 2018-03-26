@@ -1,6 +1,7 @@
-# react-node-twitter-login
+# react-node-twitter-post
 
-Demo application that shows how implement Twitter login with React on frontend and Node.js/Express on backend that is implementing REST API.
+Demo application that shows how implement Twitter login with abilitiy of posting to feed, using React on frontend and Node.js/Express on backend that is implementing REST API.
+App allows you to schedule the posting during time of the week, that has the highest traffic on twitter, according to: (http://coschedule.com/blog/best-times-to-post-on-social-media/)
 
 # What you need to install
 
