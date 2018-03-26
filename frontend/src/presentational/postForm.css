@@ -72,14 +72,13 @@ h2 {
 #add-twit button {
   border: 1px solid #9361bf;
   background: #9361bf;
-  padding: 1px 20px;
+  height: 46px;
   font-size: 16px;
   display: inline-block;
   margin: 0;
   border-radius: 0 4px 4px 0;
   cursor: pointer;
   width: 100px;
-  float: left;
   margin: 20px 0;
   border-left: 0;
   color: white;

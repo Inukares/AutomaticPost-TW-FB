@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import axios from "axios";
 import { Twitter } from "./containers/Twitter";
 import { calculatePostTime } from "./utils/calculatePostTime";
+import { format } from "./utils/calculatePostTime";
+import { Modal, ModalHeader, ModalBody } from "reactstrap";
 
 class App extends Component {
   constructor() {
@@ -14,12 +16,18 @@ class App extends Component {
       isTwitterToggled: true,
       whatToPost: "",
       autoSchedule: false,
-      postResponse: ""
+      showModal: false
     };
   }
 
   handleOnChange = e => {
     this.setState({ whatToPost: e.target.value });
+  };
+
+  toggleModal = () => {
+    this.setState({
+      showModal: !this.state.showModal
+    });
   };
 
   onTwitterToggle = () => {
@@ -46,11 +54,13 @@ class App extends Component {
           }
         })
           // so I can display modal that the post will be send
-          .then(res =>
-            this.setState({
-              postResponse: res.statusText
-            })
-          )
+          .then(res => {
+            if (res.statusText === "OK") {
+              this.setState({
+                showModal: true
+              });
+            }
+          })
           .then(() => this.setState({ whatToPost: "" }))
       );
     }
@@ -86,9 +96,19 @@ class App extends Component {
 
   render() {
     console.log(this.state);
-    const { twitterUser } = this.state;
+    const { twitterUser, showModal, autoSchedule } = this.state;
     return (
       <div className="App">
+        <Modal isOpen={showModal} toggle={this.toggleModal}>
+          <ModalHeader toggle={this.toggleModal}>
+            You have sent a post!
+          </ModalHeader>
+          <ModalBody>
+            {autoSchedule
+              ? `Your post will be posted on: ${format(calculatePostTime())}`
+              : `Your post has just been added !`}
+          </ModalBody>
+        </Modal>
         <Twitter
           {...this.state}
           user={twitterUser}
