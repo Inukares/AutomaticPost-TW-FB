@@ -5,7 +5,7 @@ App allows you to schedule the posting during time of the week, that has the hig
 
 # Images describing how it works
 ![Initial state](https://s18.postimg.cc/4c0jqcii1/image.png "Never gonna give you up")
-![Sign In/Login In verification](https://s18.postimg.cc/4c0jqcii1/image.png "Never gonna let you down")
+![Sign In/Login In verification](https://postimg.cc/image/51jc2pyh1/ "Never gonna let you down")
 ![Posting view](https://s18.postimg.cc/763p3sse1/image.png "Never gonna tell a lie")
 ![After post-adding view](https://s18.postimg.cc/v9ugs3qah/image.png "I thought nobody reads these descriptions lol")
 ![Succesfully added post](https://s18.postimg.cc/hsxi98nop/image.png "Or hurt you")
